@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="../compatible.js"></script>
+  <title>Matrix</title>
+</head>
+<body>
+  <canvas id="canvas" style="background-color:#000">
+    your browser not support canvas
+  </canvas>
+</body>
+<script>
+  var canvas=document.querySelector("#canvas"),
+      context=canvas.getContext('2d'),
+      w=canvas.width=window.innerWidth,
+      h=canvas.height=window.innerHeight;
+  
+  var shadowColor='rgba(0,0,0,.1)',//用于绘制文字阴影
+      wordColor="#FFFC3A",
+      words="0123456789qwertyuiopasdfghjklzxcvbnm,./;'\[]QWERTYUIOP{}ASDFGHJHJKL:ZXCVBBNM<>?",
+      wordsArr=words.split(''),//将文字拆分并返回一个字符串数组
+      fontSize=16,
+      column=w/fontSize,//下降的列数
+      drops=[];//用来决定Y轴坐标
+
+      //初始化drop数组，length为column,value为行数
+      for(let i=0;i<column;i++)
+      {
+        drops[i]=1;
+      }
+      
+      var draw=()=>{
+        context.save();
+        context.fillStyle=wordColor;//字体填充颜色
+        context.font=fontSize+"px arial";//填充字体
+        drops.forEach((value,index,arr) => {
+          let text=wordsArr[Math.floor(Math.random()*wordsArr.length)];
+          context.fillText(text,index*fontSize,value*fontSize);
+          if(value*fontSize>h && Math.random()>0.98)
+          {
+             arr[index]=0;//重新绘制文字
+          }
+          //value++;//value值的改变并没有影响到drops[i]中的值，下一次循环数组drops的值不变
+          arr[index]++;//修改数组对象drops中的值，下一次遍历数组drops,value值会改变
+        });
+        context.restore();
+      }
+
+      //循环动画
+      (function drawFrame(){
+        compatibleUtil.requestAnimationFrame(drawFrame,canvas); 
+        context.fillStyle=shadowColor;
+        context.fillRect(0,0,w,h);
+        draw();
+      })();
+</script>
+</html>

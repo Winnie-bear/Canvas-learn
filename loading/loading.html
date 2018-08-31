@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Loading</title>
+  <style>
+    body{
+      background-color: #F7F7F7;
+    }
+    #wrapper{
+      position: fixed;
+      top:0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+    h1{
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: 2px;
+    }
+    small{
+      font-size: 15px;
+      font-weight: 100;
+      letter-spacing: 1px;
+    }
+  </style>
+</head>
+<body>
+  <div id="wrapper">
+    <h1>Canvas Loading</h1>
+    <small>--> Powered by winnie</small>
+    <canvas id="canvas" width="500" height="400" >
+    </canvas>
+  </div>
+</body>
+<script>
+  var canvas=document.getElementById('canvas'),//获取canvas元素
+      context=canvas.getContext('2d'),//获取画图环境，指定为2D
+      centerX=canvas.width/2,//X轴的中心坐标
+      centerY=canvas.height/2,//Y轴的中心坐标
+      rad=Math.PI*2/100,//360°分为100份
+      speed=0.1;//动画加载的速度
+
+  //绘制白色外圈
+  var whiteCircle=()=>{
+    context.save();
+    context.beginPath();
+    context.lineWidth=12;//设置或返回当前的线条宽度
+    context.strokeStyle="#A5DEF1";//设置或返回用于笔触的颜色、渐变或模式。
+    context.arc(centerX,centerY,100,0,Math.PI*2,false);//创建弧/曲线,context.arc(x,y,r,sAngle,eAngle,counterclockwise)
+    //context.closePath();//创建从当前点回到起始点的路径
+    context.stroke();//绘制已定义的路径
+    context.restore();
+  }
+  //动态绘制蓝色外圈
+  var blueCircle=(x)=>{
+    context.save();
+    context.beginPath();
+    context.lineWidth=12;
+    context.strokeStyle="#49f";
+    context.arc(centerX,centerY,100,-Math.PI/2,-Math.PI/2+x*rad,false);
+    context.stroke();
+    context.restore();
+  }
+  //百分比文字绘制
+  var text=(x)=>{
+    context.save();
+    context.font="40px Arial"
+    context.fillStyle="#F47C7C";
+    context.textAlign="center";
+    context.textBaseline="middle";
+    context.fillText(x.toFixed(0)+'%',centerX,centerY);
+    context.restore();
+  }
+  //循环动画
+  (function drawFrame(){
+    if(!window.requestAnimationFrame){
+    window.requestAnimationFrame =(window.oRequestAnimationFrame || //Opera
+　　　　　　  window.webkitRequestAnimationFrame ||//谷歌老版本
+　　　　　　　window.mozRequestAnimationFrame ||//火狐老版本
+             window.msRequestAnimationFrame||//IE10
+　　　　　　　　function(callback){    //IE9以及以下版本
+　　　　　　　　　window.setTimeout(callback , 1000/60); //这里强制让动画一秒刷新60次，之所以设置为16.7毫秒刷新一次，是因为requestAnimationFrame默认也是16.7毫秒刷新一次。
+　　　　　　　　});
+    }
+    window.requestAnimationFrame(drawFrame,canvas);//此方法每秒刷新60次,可以传入两个参数，第一个是回调，第二个是执行动画的元素节点（可选），返回一个ID
+    context.clearRect(0,0,canvas.width,canvas.height);//clearRect()方法清空给定矩形内的指定像素
+    whiteCircle();
+    text(speed);
+    blueCircle(speed);
+    if(speed>=100) speed=0;
+    speed+=0.1;
+  })();
+</script>
+</html>

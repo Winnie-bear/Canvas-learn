@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>particle</title>
+  <style>
+    body{
+      margin:0;
+      padding:0;
+      position: fixed;
+      top:0;
+      left:0;
+      bottom: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  </style>
+  <script src="./particle.js"></script>
+</head>
+<body>
+  <canvas id="canvas" width="1000px" height="500px">
+    Your browser does not support canvas!
+  </canvas>
+  <script>
+   let imgToParticle=new ImgToParticle({
+     canvas:document.getElementById("canvas"),
+     imgSrcArr:["imgs/1.jpg", "imgs/2.jpg", "imgs/3.jpg", "imgs/4.jpg", "imgs/5.jpg", "imgs/6.jpg", "imgs/7.jpg"],
+     radius:1
+   });
+  </script>
+</body>
+</html>
